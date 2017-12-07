@@ -17,17 +17,14 @@ set cpo&vim
 nnoremap <Plug>YassDown :call yass#scroll(&scroll, 1)<CR>
 nnoremap <Plug>YassUp :call yass#scroll(-&scroll, 1)<CR>
 
-nnoremap <silent> <Plug>Yass_zCR   ^:<C-u>call yass#scroll(line(".") - line("w0") + &scrolloff)<CR>
-nnoremap <silent> <Plug>Yass_zt     :<C-u>call yass#scroll(line(".") - line("w0") + &scrolloff)<CR>
-nnoremap <silent> <Plug>Yass_zdot  ^:<C-u>call yass#scroll(line(".") - (line("w$") + line("w0")) / 2)<CR>
-nnoremap <silent> <Plug>Yass_zz     :<C-u>call yass#scroll(line(".") - (line("w$") + line("w0")) / 2)<CR>
-nnoremap <silent> <Plug>Yass_zdash ^:<C-u>call yass#scroll(&scrolloff + line(".") - line("w$"))<CR>
-nnoremap <silent> <Plug>Yass_zb     :<C-u>call yass#scroll(&scrolloff + line(".") - line("w$"))<CR>
+nnoremap <silent> <Plug>Yass_zCR   ^:<C-u>call yass#scroll(line(".") - line("w0") + &scrolloff, 0, 1)<CR>
+nnoremap <silent> <Plug>Yass_zt     :<C-u>call yass#scroll(line(".") - line("w0") + &scrolloff, 0, 1)<CR>
+nnoremap <silent> <Plug>Yass_zdot  ^:<C-u>call yass#scroll(line(".") - (line("w$") + line("w0")) / 2, 0, 1)<CR>
+nnoremap <silent> <Plug>Yass_zz     :<C-u>call yass#scroll(line(".") - (line("w$") + line("w0")) / 2, 0, 1)<CR>
+nnoremap <silent> <Plug>Yass_zdash ^:<C-u>call yass#scroll(&scrolloff + line(".") - line("w$"), 0, 1)<CR>
+nnoremap <silent> <Plug>Yass_zb     :<C-u>call yass#scroll(&scrolloff + line(".") - line("w$"), 0, 1)<CR>
 
 if !hasmapto('<Plug>YassDown') && maparg('<C-d>', 'n') ==# '' && !exists('g:yass_noc')
-	nmap <C-d> <Plug>YassDown
-	nmap <C-u> <Plug>YassUp
-
 	nmap <C-d> <Plug>YassDown
 	nmap <C-u> <Plug>YassUp
 endif

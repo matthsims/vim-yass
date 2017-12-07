@@ -4,6 +4,16 @@ Author: Matt Simmons
 License: MIT license
 
 ===============================================================================
+Function                                                                 *yass*
+
+yass#speed({distance}, {with_cursor=0}, {override=0})                 *yass#scroll*
+  {distance} is the distance to scroll. By default, it will add to the current
+	distance to travel.
+	{with_cursor} is whether or not to move the cursor with the scroll.
+	{override} is whether or not to zero out all values before beginning the
+	scroll.
+
+===============================================================================
 Default mappings                                                *yass-mappings*
 
   nnoremap <Plug>YassDown :call yass#scroll(&scroll, 1)<CR>
