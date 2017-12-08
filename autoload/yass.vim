@@ -1,8 +1,7 @@
-"=============================
+" vim-yass https://github.com/matthsims/vim-yass
 " File: yass.vim
 " Author: Matt Simmons <matt.simmons at compbiol.org>
 " License: MIT license
-"=============================
 
 scriptencoding utf-8
 
@@ -15,12 +14,12 @@ let g:loaded_yass = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-if !exists('g:yass_interval')
-	let g:yass_interval = 20
-endif
+" Defaults
+let g:yass_interval = exists('g:yass_interval') ? g:yass_interval : 20
+let g:yass_minimum = exists('g:yass_minimum') ? g:yass_minimum : 8
 
 if !exists('g:Yass_speed')
-	let g:Yass_speed = {y, speed -> 55 + 2*y + 50*tanh((y-10)/5)}
+	let g:Yass_speed = {y -> 55 + 2*y + 50*tanh((y-10)/5)}
 endif
 
 function! s:scroll_handler(timer)
@@ -32,7 +31,7 @@ function! s:scroll_handler(timer)
 	endif
 
 	" calculate dy ...
-	let l:speed = g:Yass_speed(s:remaining + s:dy, s:speed)
+	let l:speed = g:Yass_speed(s:remaining + s:dy)
 	if l:speed <= 8
 		let l:speed = 8
 	endif
@@ -67,12 +66,11 @@ endfunction
 
 function! yass#reset()
 	let s:dy = 0.0
-	let s:speed = 0.0
 	let s:remaining = 0
 	let s:direction = 0
 	let s:scroll_with_cursor = 0
 
-	if exists('s:timer_id')
+	if has('timers') && exists('s:timer_id')
 		call timer_stop(s:timer_id)
 		unlet s:timer_id
 	endif
@@ -89,13 +87,14 @@ function! yass#scroll(distance, ...)
 	let s:remaining = abs(s:remaining)
 	let s:relt = reltime()
 
+	let l:interval = float2nr(round(g:yass_interval))
 	if !has('timers')
 		while s:remaining > 0
+			let s:timer_id = 1
 			call s:scroll_handler(s:timer_id)
 			execute 'sleep '.l:interval.'m'
 		endwhile
 	elseif !exists("s:timer_id")
-		let l:interval = float2nr(round(g:yass_interval))
 		let s:timer_id = timer_start(l:interval, function("s:scroll_handler"), {'repeat': -1})
 	endif
 endfunction
