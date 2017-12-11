@@ -23,7 +23,9 @@ if !exists('g:Yass#speed')
 endif
 
 function! s:scroll_handler(timer)
-	if s:remaining <= 0
+	if s:remaining <= 0 ||
+				\ (line('.') == 1 && s:direction == -1) ||
+				\ (line('.') == line('$') && s:direction == 1)
 		call timer_stop(a:timer)
 		silent! unlet s:timer_id  " silent for the looped version in #scroll
 		let s:direction = 0
