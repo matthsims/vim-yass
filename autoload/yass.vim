@@ -18,8 +18,8 @@ set cpo&vim
 let g:yass_interval = exists('g:yass_interval') ? g:yass_interval : 20
 let g:yass_minimum = exists('g:yass_minimum') ? g:yass_minimum : 8
 
-if !exists('g:Yass_speed')
-	let g:Yass_speed = {y -> 55 + 2*y + 50*tanh((y-10)/5)}
+if !exists('g:Yass#speed')
+	let g:Yass#speed = {y -> 55 + 2*y + 50*tanh((y-10)/5)}
 endif
 
 function! s:scroll_handler(timer)
@@ -31,7 +31,7 @@ function! s:scroll_handler(timer)
 	endif
 
 	" calculate dy ...
-	let l:speed = g:Yass_speed(s:remaining + s:dy)
+	let l:speed = g:Yass#speed(s:remaining + s:dy)
 	if l:speed <= 8
 		let l:speed = 8
 	endif
@@ -58,10 +58,6 @@ function! s:scroll_handler(timer)
 	execute l:cmd
 	let &scrolloff = l:save_scrolloff
 	redraw
-
-	" these are easily separated, but there is no reason to as of right now.
-	" yass#scroll should be controlling all scrolling events, handling them
-	" appropriately.
 endfunction
 
 function! yass#reset()
