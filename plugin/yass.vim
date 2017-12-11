@@ -15,10 +15,8 @@ set cpo&vim
 
 nnoremap <silent> <Plug>YassDown      :call yass#scroll(&scroll, 1)<CR>
 nnoremap <silent> <Plug>YassUp        :call yass#scroll(-&scroll, 1)<CR>
-
-nnoremap <silent> <Plug>YassPageDown  :call yass#scroll(&scroll * 2, 1)<CR>
-nnoremap <silent> <Plug>YassPageUp    :call yass#scroll(-&scroll * 2, 1)<CR>
-
+nnoremap <silent> <Plug>YassPageDown  :call yass#scroll(&scroll * 2, 0)<CR>
+nnoremap <silent> <Plug>YassPageUp    :call yass#scroll(-&scroll * 2, 0)<CR>
 nnoremap <silent> <Plug>Yass_zCR     ^:<C-u>call yass#scroll(winline() - &scrolloff, 0, 1)<CR>
 nnoremap <silent> <Plug>Yass_zt       :<C-u>call yass#scroll(winline() - &scrolloff, 0, 1)<CR>
 nnoremap <silent> <Plug>Yass_z.      ^:<C-u>call yass#scroll(winline() - winheight(0)/2, 0, 1)<CR>
