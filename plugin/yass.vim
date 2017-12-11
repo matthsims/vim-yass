@@ -19,12 +19,12 @@ nnoremap <silent> <Plug>YassUp        :call yass#scroll(-&scroll, 1)<CR>
 nnoremap <silent> <Plug>YassPageDown  :call yass#scroll(&scroll * 2, 1)<CR>
 nnoremap <silent> <Plug>YassPageUp    :call yass#scroll(-&scroll * 2, 1)<CR>
 
-nnoremap <silent> <Plug>Yass_zCR     ^:<C-u>call yass#scroll(line(".") - line("w0") + &scrolloff, 0, 1)<CR>
-nnoremap <silent> <Plug>Yass_zt       :<C-u>call yass#scroll(line(".") - line("w0") + &scrolloff, 0, 1)<CR>
-nnoremap <silent> <Plug>Yass_z.      ^:<C-u>call yass#scroll(line(".") - (line("w$") + line("w0")) / 2, 0, 1)<CR>
-nnoremap <silent> <Plug>Yass_zz       :<C-u>call yass#scroll(line(".") - (line("w$") + line("w0")) / 2, 0, 1)<CR>
-nnoremap <silent> <Plug>Yass_z-      ^:<C-u>call yass#scroll(&scrolloff + line(".") - line("w$"), 0, 1)<CR>
-nnoremap <silent> <Plug>Yass_zb       :<C-u>call yass#scroll(&scrolloff + line(".") - line("w$"), 0, 1)<CR>
+nnoremap <silent> <Plug>Yass_zCR     ^:<C-u>call yass#scroll(winline() - &scrolloff, 0, 1)<CR>
+nnoremap <silent> <Plug>Yass_zt       :<C-u>call yass#scroll(winline() - &scrolloff, 0, 1)<CR>
+nnoremap <silent> <Plug>Yass_z.      ^:<C-u>call yass#scroll(winline() - winheight(0)/2, 0, 1)<CR>
+nnoremap <silent> <Plug>Yass_zz       :<C-u>call yass#scroll(winline() - winheight(0)/2, 0, 1)<CR>
+nnoremap <silent> <Plug>Yass_z-      ^:<C-u>call yass#scroll(winline() - winheight(0) + &scrolloff, 0, 1)<CR>
+nnoremap <silent> <Plug>Yass_zb       :<C-u>call yass#scroll(winline() - winheight(0) + &scrolloff, 0, 1)<CR>
 
 if !hasmapto('<Plug>YassDown') && maparg('<C-d>', 'n') ==# '' && !exists('g:yass_noc')
 	nmap <C-d> <Plug>YassDown
