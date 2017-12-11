@@ -4,52 +4,76 @@ Author: Matt Simmons
 License: MIT license
 
 ===============================================================================
-Function                                                                 *yass*
+Scrolling                                                                *yass*
 
-yass#speed({distance}, {with_cursor=0}, {override=0})                 *yass#scroll*
+yass#scroll({distance}, {with_cursor=0}, {override=0})            *yass#scroll*
   {distance} is the distance to scroll. By default, it will add to the current
-	distance to travel.
-	{with_cursor} is whether or not to move the cursor with the scroll.
-	{override} is whether or not to zero out all values before beginning the
-	scroll.
+  distance to travel.
+  {with_cursor} is whether or not to move the cursor with the scroll.
+  {override} is whether or not to zero out all values before beginning the
+  scroll.
 
 ===============================================================================
 Default mappings                                                *yass-mappings*
 
-  nnoremap <Plug>YassDown :call yass#scroll(&scroll, 1)<CR>
-  nnoremap <Plug>YassUp :call yass#scroll(-&scroll, 1)<CR>
-  
-  nnoremap <silent> <Plug>Yass_zCR   ^:<C-u>call yass#scroll(line(".") - line("w0") + &scrolloff)<CR>
-  nnoremap <silent> <Plug>Yass_zt     :<C-u>call yass#scroll(line(".") - line("w0") + &scrolloff)<CR>
-  nnoremap <silent> <Plug>Yass_zdot  ^:<C-u>call yass#scroll(line(".") - (line("w$") + line("w0")) / 2)<CR>
-  nnoremap <silent> <Plug>Yass_zz     :<C-u>call yass#scroll(line(".") - (line("w$") + line("w0")) / 2)<CR>
-  nnoremap <silent> <Plug>Yass_zdash ^:<C-u>call yass#scroll(&scrolloff + line(".") - line("w$"))<CR>
-  nnoremap <silent> <Plug>Yass_zb     :<C-u>call yass#scroll(&scrolloff + line(".") - line("w$"))<CR>
-  
-  if !hasmapto('<Plug>YassDown') && maparg('<C-d>', 'n') ==# '' && !exists('g:yass_noc')
-  	nmap <C-d> <Plug>YassDown
-  	nmap <C-u> <Plug>YassUp
-  
-  	nmap <C-d> <Plug>YassDown
-  	nmap <C-u> <Plug>YassUp
-  endif
-  
-  if !hasmapto('<Plug>Yass_zz') && maparg('zz', 'n') ==# '' && !exists('g:yass_noz')
-  	nmap z<CR> <Plug>Yass_zCR
-  	nmap zt    <Plug>Yass_zt
-  	nmap z.    <Plug>Yass_zdot
-  	nmap zz    <Plug>Yass_zz
-  	nmap z-    <Plug>Yass_zdash
-  	nmap zb    <Plug>Yass_zb
-  endif
+Definitions:
+    <Plug>YassDown      :call yass#scroll(&scroll, 1)<CR>
+    <Plug>YassUp        :call yass#scroll(-&scroll, 1)<CR>
+    <Plug>YassPageDown  :call yass#scroll(&scroll * 2, 0)<CR>
+    <Plug>YassPageUp    :call yass#scroll(-&scroll * 2, 0)<CR>
+    <Plug>Yass_zCR     ^:<C-u>call yass#scroll(winline() - &scrolloff, 0, 1)<CR>
+    <Plug>Yass_zt       :<C-u>call yass#scroll(winline() - &scrolloff, 0, 1)<CR>
+    <Plug>Yass_z.      ^:<C-u>call yass#scroll(winline() - winheight(0)/2, 0, 1)<CR>
+    <Plug>Yass_zz       :<C-u>call yass#scroll(winline() - winheight(0)/2, 0, 1)<CR>
+    <Plug>Yass_z-      ^:<C-u>call yass#scroll(winline() - winheight(0) + &scrolloff, 0, 1)<CR>
+    <Plug>Yass_zb       :<C-u>call yass#scroll(winline() - winheight(0) + &scrolloff, 0, 1)<CR>
+
+Mappings:
+if !hasmapto('<Plug>YassDown') && maparg('<C-d>', 'n') ==# '' && !exists('g:yass_noc')
+    <C-d> <Plug>YassDown
+    <C-u> <Plug>YassUp
+    <C-f> <Plug>YassPageDown
+    <C-b> <Plug>YassPageUp
+if !hasmapto('<Plug>Yass_zz') && maparg('zz', 'n') ==# '' && !exists('g:yass_noz')
+    z<CR> <Plug>Yass_zCR
+    zt    <Plug>Yass_zt
+    z.    <Plug>Yass_zdot
+    zz    <Plug>Yass_zz
+    z-    <Plug>Yass_zdash
+    zb    <Plug>Yass_zb
 
 ===============================================================================
 Speed calculation                                                  *yass-speed*
 
 *g:Yass_speed*
-Must be a |Funcref|. By default,
-  let g:Yass_speed = {y, speed -> 55 + 2*y + 50*tanh((y-10)/5)}
-It should return a positive value interpreted as lines/second.
+A |Funcref| (note the capital Y) that returns the current speed, given the
+distance needed to scroll and the previous speed. One or both parameters may
+be ignored, but the function is called with those so they must be accepted.
+By default (first) and some additonal examples:
+  let g:Yass#speed = {y -> 55 + 2*y + 50*tanh((y-10)/5)}
+  let g:Yass#speed = {y -> y <= 30 ? 16 * exp(y/12) : 300}
+  let g:Yass#speed = {y -> y * 16}
+  let g:Yass#speed = {y -> 20}
+
+  function StepwiseSpeed(y)
+    if a:y > 50
+      return 400
+    elseif a:y > 40
+      return 300
+    elseif a:y > 20
+      return 150
+    elseif a:y > 5
+      return 50
+    endif
+    return 15
+  endfunction
+  let g:Yass#speed = function("StepwiseSpeed")
+
+It should return a positive value interpreted as lines/second. If the value is
+below |g:yass_minimum|, then |g:yass_minimum| will be used for the calculations.
+
+*g:yass_minimum*
+Minimum value for speed. Must be above 0. If |g:Yass_speed
 
 *g:yass_interval*
 The number of miliseconds to wait before checkign to see if a scroll tick
