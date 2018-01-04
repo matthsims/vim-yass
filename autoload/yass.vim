@@ -22,7 +22,7 @@ if !exists('g:Yass#speed')
 	let g:Yass#speed = {y -> 55 + 2*y + 50*tanh((y-10)/5)}
 endif
 
-function! s:scroll_handler(timer)
+function! s:scroll_handler(timer) abort
 	if s:remaining <= 0 ||
 				\ (line('.') == 1 && s:direction == -1) ||
 				\ (line('.') == line('$') && s:direction == 1)
@@ -62,7 +62,7 @@ function! s:scroll_handler(timer)
 	redraw
 endfunction
 
-function! yass#reset()
+function! yass#reset() abort
 	let s:dy = 0.0
 	let s:remaining = 0
 	let s:direction = 0
@@ -74,7 +74,7 @@ function! yass#reset()
 	endif
 endfunction
 
-function! yass#scroll(distance, ...)
+function! yass#scroll(distance, ...) abort
 	let s:scroll_with_cursor = (a:0 >= 1) ? a:1 : 0
 	let l:override = (a:0 >= 2) ? a:2 : 0
 	if l:override
