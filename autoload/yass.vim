@@ -19,7 +19,11 @@ let g:yass_interval = exists('g:yass_interval') ? g:yass_interval : 20
 let g:yass_minimum = exists('g:yass_minimum') ? g:yass_minimum : 8
 
 if !exists('g:Yass#speed')
-	let g:Yass#speed = {y -> 55 + 2*y + 50*tanh((y-10)/5)}
+	function s:speed(y)
+		return 55 + 2*a:y + 50*tanh((a:y-10)/5)
+	endfunction
+
+	let g:Yass#speed = function('s:speed')
 endif
 
 function! s:scroll_handler(timer) abort
