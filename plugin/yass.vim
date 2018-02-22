@@ -29,24 +29,27 @@ nnoremap <silent> <Plug>Yass_zb       :<C-u>call yass#scroll(winline() - winheig
 nnoremap <silent> <Plug>YassC-e       :<C-u>call yass#scroll(v:count1, 0)<CR>
 nnoremap <silent> <Plug>YassC-y       :<C-u>call yass#scroll(- v:count1, 0)<CR>
 
-nmap <C-e> <Plug>YassC-e
-nmap <C-e> <Plug>YassC-y
+let s:bindings = {
+			\  '<C-e>' : '<Plug>YassC-e',
+			\  '<C-y>' : '<Plug>YassC-y',
+			\  '<C-d>' : '<Plug>YassDown',
+			\  '<C-u>' : '<Plug>YassUp',
+			\  '<C-f>' : '<Plug>YassPageDown',
+			\  '<C-b>' : '<Plug>YassPageUp',
+			\  'z<CR>' : '<Plug>Yass_zCR',
+			\  'zt'    : '<Plug>Yass_zt',
+			\  'z.'    : '<Plug>Yass_z.',
+			\  'zz'    : '<Plug>Yass_zz',
+			\  'z-'    : '<Plug>Yass_z-',
+			\  'zb'    : '<Plug>Yass_zb'
+			\ }
 
-if !hasmapto('<Plug>YassDown') && maparg('<C-d>', 'n') ==# '' && !exists('g:yass_noc')
-	nmap <C-d> <Plug>YassDown
-	nmap <C-u> <Plug>YassUp
-
-	nmap <C-f> <Plug>YassPageDown
-	nmap <C-b> <Plug>YassPageUp
-endif
-
-if !hasmapto('<Plug>Yass_zz') && maparg('zz', 'n') ==# '' && !exists('g:yass_noz')
-	nmap z<CR> <Plug>Yass_zCR
-	nmap zt    <Plug>Yass_zt
-	nmap z.    <Plug>Yass_z.
-	nmap zz    <Plug>Yass_zz
-	nmap z-    <Plug>Yass_z-
-	nmap zb    <Plug>Yass_zb
+if !exists('g:yass_nobind')
+	for bind in keys(s:bindings)
+		if !hasmapto(s:bindings[bind]) && maparg(bind, 'n') ==# ''
+			execute	'nmap ' . bind . ' ' . s:bindings[bind]
+		endif
+	endfor
 endif
 
 let &cpo = s:save_cpo
