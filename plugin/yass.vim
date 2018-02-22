@@ -26,6 +26,11 @@ nnoremap <silent> <Plug>Yass_z.      ^:<C-u>call yass#scroll(winline() - winheig
 nnoremap <silent> <Plug>Yass_zz       :<C-u>call yass#scroll(winline() - winheight(0)/2, 0, 1)<CR>
 nnoremap <silent> <Plug>Yass_z-      ^:<C-u>call yass#scroll(winline() - winheight(0) + &scrolloff, 0, 1)<CR>
 nnoremap <silent> <Plug>Yass_zb       :<C-u>call yass#scroll(winline() - winheight(0) + &scrolloff, 0, 1)<CR>
+nnoremap <silent> <Plug>YassC-e       :<C-u>call yass#scroll(v:count1, 0)<CR>
+nnoremap <silent> <Plug>YassC-y       :<C-u>call yass#scroll(- v:count1, 0)<CR>
+
+nmap <C-e> <Plug>YassC-e
+nmap <C-e> <Plug>YassC-y
 
 if !hasmapto('<Plug>YassDown') && maparg('<C-d>', 'n') ==# '' && !exists('g:yass_noc')
 	nmap <C-d> <Plug>YassDown
