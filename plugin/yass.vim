@@ -8,6 +8,9 @@ scriptencoding utf-8
 if exists('g:loaded_yass')
 	finish
 endif
+if !has('patch-7.4.1285') && !has('nvim')
+	finish
+endif
 let g:loaded_yass = 1
 
 let s:save_cpo = &cpo
