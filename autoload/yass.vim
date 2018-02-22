@@ -20,7 +20,7 @@ let g:yass_minimum = exists('g:yass_minimum') ? g:yass_minimum : 8
 
 if !exists('g:Yass#speed')
 	function s:speed(y)
-		return 55 + 2*a:y + 50*tanh((a:y-10)/5)
+		return 58 + 2*a:y + 50*tanh((a:y-10)/5)
 	endfunction
 
 	let g:Yass#speed = function('s:speed')
