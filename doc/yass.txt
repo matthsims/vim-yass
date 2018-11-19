@@ -17,30 +17,21 @@ yass#scroll({distance}, {with_cursor=0}, {override=0})            *yass#scroll*
 Default mappings                                                *yass-mappings*
 
 Definitions:
-    <Plug>YassDown      :call yass#scroll(&scroll, 1)<CR>
-    <Plug>YassUp        :call yass#scroll(-&scroll, 1)<CR>
-    <Plug>YassPageDown  :call yass#scroll(&scroll * 2, 0)<CR>
-    <Plug>YassPageUp    :call yass#scroll(-&scroll * 2, 0)<CR>
-    <Plug>Yass_zCR     ^:<C-u>call yass#scroll(winline() - &scrolloff, 0, 1)<CR>
-    <Plug>Yass_zt       :<C-u>call yass#scroll(winline() - &scrolloff, 0, 1)<CR>
-    <Plug>Yass_z.      ^:<C-u>call yass#scroll(winline() - winheight(0)/2, 0, 1)<CR>
-    <Plug>Yass_zz       :<C-u>call yass#scroll(winline() - winheight(0)/2, 0, 1)<CR>
-    <Plug>Yass_z-      ^:<C-u>call yass#scroll(winline() - winheight(0) + &scrolloff, 0, 1)<CR>
-    <Plug>Yass_zb       :<C-u>call yass#scroll(winline() - winheight(0) + &scrolloff, 0, 1)<CR>
+     <C-d> ->  <Plug>YassDown      :call yass#scroll(&scroll, 1)<CR>
+     <C-u> ->  <Plug>YassUp        :call yass#scroll(-&scroll, 1)<CR>
+     <C-f> ->  <Plug>YassPageDown  :call yass#scroll(&scroll * 2, 0)<CR>
+     <C-b> ->  <Plug>YassPageUp    :call yass#scroll(-&scroll * 2, 0)<CR>
+     z<CR> ->  <Plug>Yass_zCR     ^:<C-u>call yass#scroll(winline() - &scrolloff, 0, 1)<CR>
+     zt    ->  <Plug>Yass_zt       :<C-u>call yass#scroll(winline() - &scrolloff - 1, 0, 1)<CR>
+     z.    ->  <Plug>Yass_z.      ^:<C-u>call yass#scroll(winline() - winheight(0)/2, 0, 1)<CR>
+     zz    ->  <Plug>Yass_zz       :<C-u>call yass#scroll(winline() - winheight(0)/2, 0, 1)<CR>
+     z-    ->  <Plug>Yass_z-      ^:<C-u>call yass#scroll(winline() - winheight(0) + &scrolloff, 0, 1)<CR>
+     zb    ->  <Plug>Yass_zb       :<C-u>call yass#scroll(winline() - winheight(0) + &scrolloff, 0, 1)<CR>
+     <C-e> ->  <Plug>YassC-e       :<C-u>call yass#scroll(v:count1, 0)<CR>
+     <C-y> ->  <Plug>YassC-y       :<C-u>call yass#scroll(- v:count1, 0)<CR>
 
 Mappings:
-if !hasmapto('<Plug>YassDown') && maparg('<C-d>', 'n') ==# '' && !exists('g:yass_noc')
-    <C-d> <Plug>YassDown
-    <C-u> <Plug>YassUp
-    <C-f> <Plug>YassPageDown
-    <C-b> <Plug>YassPageUp
-if !hasmapto('<Plug>Yass_zz') && maparg('zz', 'n') ==# '' && !exists('g:yass_noz')
-    z<CR> <Plug>Yass_zCR
-    zt    <Plug>Yass_zt
-    z.    <Plug>Yass_zdot
-    zz    <Plug>Yass_zz
-    z-    <Plug>Yass_zdash
-    zb    <Plug>Yass_zb
+Define *g:yass_nobind* to disable bindings, if you wish to use your own.
 
 ===============================================================================
 Speed calculation                                                  *yass-speed*
@@ -55,6 +46,7 @@ By default (first) and some additonal examples:
   let g:Yass#speed = {y -> y * 16}
   let g:Yass#speed = {y -> 20}
 
+  Note |lambda| expressions can be used for neovim, but are not required:
   function StepwiseSpeed(y)
     if a:y > 50
       return 400
@@ -76,7 +68,8 @@ below |g:yass_minimum|, then |g:yass_minimum| will be used for the calculations.
 Minimum value for speed. Must be above 0. If |g:Yass_speed
 
 *g:yass_interval*
-The number of miliseconds to wait before checkign to see if a scroll tick
+The number of miliseconds to wait before checking to see if a scroll tick
 should be done. If this is set to a high value, the plugin will scroll
-multiple ticks at once to accomodate.
+multiple ticks at once to accomodate. 60 fps -> 1000/60 = 16.666
+Default 16
 
